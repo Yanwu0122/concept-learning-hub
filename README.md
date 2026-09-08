@@ -11,6 +11,8 @@
 - 作为后续课程项目继续沉淀学习资料的个人工具基础
 
 ## 目录结构
+
+```text
 concept-learning-hub/
 ├── .workbuddy/
 │   └── skills/
@@ -28,6 +30,8 @@ concept-learning-hub/
 ├── concept-relationship.md                        # 三者关系说明（Markdown 版）
 ├── README.md
 └── .gitignore
+```
+
 ## Skill 存放路径
 
 项目级 Skill 位于 `.workbuddy/skills/concept-learning-generator/`，核心文件为 `SKILL.md`，其顶部包含 YAML 元数据（`name`、`description`），并明确描述了适用场景、输入信息、生成步骤、输出结构、资料来源要求与自检要求。
@@ -57,7 +61,7 @@ Skill 是可复用的：给它任意一个新概念名，它都能按统一结�
 在使用 AI 协助组织本仓库过程中，我做了以下人工核查与修改：
 - 逐个阅读并核对了三份学习资料的核心表述，确保概念解释准确、无证据性错误。
 - 核查所有参考来源链接均可访问，并补充了官方与权威来源；移除了不可验证的占位链接。
-- 复核了 concepts-relationship 中对「上下文—Agent—Skill」关系的描述，确保符合课程理解。
+- 复核了 concept-relationship 中对「上下文—Agent—Skill」关系的描述，确保符合课程理解。
 - 检查了 Skill 的目录结构与 YAML 元数据符合规范。
 
 ## 版本与安全
