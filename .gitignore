@@ -1,0 +1,36 @@
+# 敏感信息与本地环境
+.env
+*.pem
+*.key
+*.secret
+id_rsa
+id_rsa.pub
+
+# 凭证与密钥
+*.env.*
+.env.*
+config/secrets*
+**/credentials*
+oauth_token*
+*.token
+
+# 依赖缓存与构建产物
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+build/
+*.egg-info/
+
+# 日志与临时文件
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 本地输出
+.tmp/
+output/
