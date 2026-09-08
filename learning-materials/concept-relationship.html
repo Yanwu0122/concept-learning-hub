@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>概念关系 - 上下文 / Agent / Skill</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif; background: #F7F9FA; color: #1A252F; line-height: 1.8; padding: 40px 20px; }
+    .container { max-width: 860px; margin: 0 auto; }
+    .header { margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid #2C3E50; }
+    .header-concept { font-size: 30px; font-weight: 700; color: #2C3E50; margin-bottom: 4px; }
+    .header-subtitle { font-size: 15px; color: #7F8C8D; margin-top: 8px; }
+    .section { margin-bottom: 28px; background: #FFFFFF; border-radius: 8px; padding: 24px 28px; border: 1px solid #D5DDE3; }
+    .section-title { font-size: 18px; font-weight: 700; color: #2C3E50; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid #2C3E50; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
+    .rel-card { background: #EDF2F7; border-radius: 8px; padding: 18px 20px; border-top: 3px solid #5D7B93; }
+    .rel-card-title { font-size: 16px; font-weight: 700; color: #2C3E50; margin-bottom: 8px; }
+    .rel-card-desc { font-size: 14px; color: #34495E; line-height: 1.7; }
+    .rel-block { margin-bottom: 18px; }
+    .rel-block-title { font-size: 16px; font-weight: 600; color: #34495E; margin-bottom: 8px; }
+    .rel-block-content { font-size: 15px; color: #1A252F; line-height: 1.9; padding: 14px 18px; background: #EDF1F4; border-radius: 6px; }
+    .arrow-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0; font-size: 15px; color: #5D7B93; font-weight: 600; }
+    .arrow-box { background: #E8EDF1; color: #2C3E50; padding: 8px 16px; border-radius: 6px; }
+    .arrow-sym { font-size: 18px; }
+    .summary-box { padding: 18px 20px; background: #F0F4F8; border-radius: 8px; border: 1px solid #5D7B93; }
+    .summary-box p { font-size: 15px; color: #1A252F; line-height: 1.9; }
+    .footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid #D5DDE3; font-size: 12px; color: #7F8C8D; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-concept">概念关系：上下文 · Agent · Skill</div>
+      <div class="header-subtitle">三个核心概念的关联与协同</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">三者概览</div>
+      <div class="rel-grid">
+        <div class="rel-card">
+          <div class="rel-card-title">大模型的上下文</div>
+          <div class="rel-card-desc">模型的"工作记忆区间"，承载每一次推理所依赖的全部输入信息，是能力发挥的基础边界。</div>
+        </div>
+        <div class="rel-card">
+          <div class="rel-card-title">Agent（智能代理）</div>
+          <div class="rel-card-desc">在上下文之上运转的"行动者"，负责感知、推理、调用工具并执行任务。</div>
+        </div>
+        <div class="rel-card">
+          <div class="rel-card-title">Skill（技能包）</div>
+          <div class="rel-card-desc">沉淀下来的"能力资产"，把流程与知识封装起来，供 Agent 按需加载复用。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">它们如何关联</div>
+      <div class="rel-block">
+        <div class="rel-block-title">1. 上下文是 Agent 的"工作台"</div>
+        <div class="rel-block-content">Agent 的一切推理都发生在大模型的上下文窗口中。上下文里放入多少、什么质量的指令与资料，直接决定 Agent 能否作出准确判断。可以说，上下文是 Agent 思考与行动所依赖的临时信息空间。</div>
+      </div>
+      <div class="rel-block">
+        <div class="rel-block-title">2. Agent 是上下文的"使用者与组织者"</div>
+        <div class="rel-block-content">Agent 负责把任务相关的内容（检索结果、历史、系统提示、用户输入）合理地组织进上下文，驱动模型完成推理，并据此调用工具、执行动作。它像一位在有限工作台上调度资源的统筹者。</div>
+      </div>
+      <div class="rel-block">
+        <div class="rel-block-title">3. Skill 是 Agent 可复用的"方法库"</div>
+        <div class="rel-block-content">Skill 把"完成某类任务的最佳流程与知识"提前封装。Agent 识别到任务匹配时把 Skill 的内容（含脚本与参考）加载进上下文执行，从而复用经验、减少每次从零摸索的成本。</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">协同工作示意</div>
+      <div class="arrow-flow">
+        <span class="arrow-box">用户提问</span>
+        <span class="arrow-sym">→</span>
+        <span class="arrow-box">Agent 加载 Skill</span>
+        <span class="arrow-sym">→</span>
+        <span class="arrow-box">组织进上下文</span>
+        <span class="arrow-sym">→</span>
+        <span class="arrow-box">模型推理</span>
+        <span class="arrow-sym">→</span>
+        <span class="arrow-box">调用工具/输出</span>
+      </div>
+      <div class="rel-block">
+        <div class="rel-block-title">典型流程解读</div>
+        <div class="rel-block-content">当用户提出某个任务，Agent 先判断是否有匹配的 Skill；若有，则把 Skill 的指南、可能的脚本说明一并纳入上下文；随后在有限的上下文窗口内完成推理规划并执行。Skill 让"怎么做"沉淀下来（降低每次的探索成本），上下文则决定"这一次具体怎么做"。二者与 Agent 的思考与行动环环相扣。</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">关系总结</div>
+      <div class="summary-box">
+        <p><strong>一句话概括：</strong>上下文是大模型的"信息工作区"，Agent 是使用该工作区自主行动的"执行者"，Skill 则是能让执行者少走弯路的"经验与流程库"。三者彼此依赖：Agent 在上下文中思考，通过加载 Skill 提升行动质量，而 Skill 的价值最终也要借助 Agent 的合理组织（放入恰当的上下文）才能发挥。强大的 Agent = 恰当的上下文 + 可复用的 Skill。</p>
+      </div>
+    </div>
+
+    <div class="footer">概念学习资料 | 配色: 深海蓝</div>
+  </div>
+</body>
+</html>
