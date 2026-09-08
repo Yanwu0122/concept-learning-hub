@@ -11,7 +11,23 @@
 - 作为后续课程项目继续沉淀学习资料的个人工具基础
 
 ## 目录结构
-
+concept-learning-hub/
+├── .workbuddy/
+│   └── skills/
+│       └── concept-learning-generator/
+│           ├── SKILL.md                            # Skill 核心文件
+│           ├── references/
+│           │   └── color-schemes.md                # 配色方案参考
+│           └── scripts/
+│               └── generate_learning_material.py  # HTML 渲染脚本
+├── learning-materials/
+│   ├── agent.html                                 # Agent 概念学习资料
+│   ├── llm-context.html                           # 大模型的上下文
+│   ├── skill.html                                 # Skill 概念学习资料
+│   └── concept-relationship.html                  # 三者关系（网页版）
+├── concept-relationship.md                        # 三者关系说明（Markdown 版）
+├── README.md
+└── .gitignore
 ## Skill 存放路径
 
 项目级 Skill 位于 `.workbuddy/skills/concept-learning-generator/`，核心文件为 `SKILL.md`，其顶部包含 YAML 元数据（`name`、`description`），并明确描述了适用场景、输入信息、生成步骤、输出结构、资料来源要求与自检要求。
