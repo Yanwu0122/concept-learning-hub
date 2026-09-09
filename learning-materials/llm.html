@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LLM - 概念学习资料</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif; background: #F7F9FA; color: #1A252F; line-height: 1.8; padding: 40px 20px; }
+    .container { max-width: 820px; margin: 0 auto; }
+    .header { margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid #2C3E50; }
+    .header-concept { font-size: 32px; font-weight: 700; color: #2C3E50; margin-bottom: 4px; }
+    .header-concept-zh { font-size: 20px; font-weight: 400; color: #34495E; margin-left: 12px; }
+    .header-subtitle { font-size: 15px; color: #7F8C8D; margin-top: 8px; }
+    .section { margin-bottom: 28px; background: #FFFFFF; border-radius: 8px; padding: 24px 28px; border: 1px solid #D5DDE3; }
+    .section-title { font-size: 18px; font-weight: 700; color: #2C3E50; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid #2C3E50; }
+    .objectives { background: #EDF2F7; border-radius: 8px; padding: 20px 24px; margin-bottom: 28px; }
+    .objectives-title { font-size: 16px; font-weight: 700; color: #2C3E50; margin-bottom: 12px; }
+    .objectives li { font-size: 15px; color: #1A252F; margin-bottom: 6px; margin-left: 20px; line-height: 1.8; }
+    .core-questions { margin-bottom: 28px; }
+    .core-question { font-size: 15px; color: #34495E; padding: 8px 16px; margin-bottom: 6px; background: #E8EDF1; border-radius: 6px; }
+    .core-question::before { content: 'Q: '; font-weight: 700; color: #2C3E50; }
+    .interpretation { font-size: 15px; color: #1A252F; line-height: 2; margin-bottom: 20px; padding: 16px 20px; background: #EDF1F4; border-radius: 0 8px 8px 0; border-left: 3px solid #5D7B93; }
+    .mechanism-list { margin-bottom: 20px; }
+    .mechanism-item { margin-bottom: 14px; padding-left: 16px; border-left: 2px solid #5D7B93; }
+    .mechanism-title { font-size: 15px; font-weight: 600; color: #34495E; margin-bottom: 4px; }
+    .mechanism-desc { font-size: 14px; color: #1A252F; line-height: 1.8; }
+    .features { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .feature-tag { font-size: 13px; color: #2C3E50; background: #E8EDF1; padding: 6px 14px; border-radius: 20px; font-weight: 500; }
+    .scenario { margin-bottom: 20px; }
+    .scenario-title { font-size: 16px; font-weight: 600; color: #34495E; margin-bottom: 10px; }
+    .scenario-context { font-size: 15px; color: #1A252F; line-height: 1.9; margin-bottom: 12px; }
+    .scenario-analysis { font-size: 14px; color: #4A5568; line-height: 1.9; padding: 14px 18px; background: #EDF1F4; border-radius: 6px; }
+    .scenario-analysis::before { content: '概念映射: '; font-weight: 600; color: #5D7B93; }
+    .confusion-item { margin-bottom: 16px; padding: 14px 18px; background: #F7F9FA; border-radius: 6px; }
+    .confusion-q { font-size: 15px; font-weight: 600; color: #34495E; margin-bottom: 6px; }
+    .confusion-a { font-size: 14px; color: #1A252F; line-height: 1.8; }
+    .test-item { margin-bottom: 16px; padding: 16px 20px; background: #F0F4F8; border-radius: 8px; border: 1px solid #5D7B93; }
+    .test-q { font-size: 15px; font-weight: 600; color: #2C3E50; margin-bottom: 8px; }
+    .test-q::before { content: '自测: '; color: #5D7B93; }
+    .test-a { font-size: 14px; color: #4A5568; line-height: 1.8; padding-top: 8px; border-top: 1px dashed #D5DDE3; margin-top: 8px; }
+    .test-a::before { content: '参考答案: '; font-weight: 600; color: #5D7B93; }
+    .source-item { margin-bottom: 10px; padding-left: 16px; position: relative; font-size: 14px; line-height: 1.7; }
+    .source-item::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: #5D7B93; }
+    .source-item a { color: #34495E; text-decoration: underline; text-underline-offset: 3px; }
+    .source-note { color: #7F8C8D; font-size: 13px; margin-left: 8px; }
+    .footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid #D5DDE3; font-size: 12px; color: #7F8C8D; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-concept">LLM<span class="header-concept-zh">大语言模型（Large Language Model）</span></div>
+      <div class="header-subtitle">在海量文本上训练出的「接续生成器」，也是 Agent 时代的「大脑」</div>
+    </div>
+    <div class="objectives">
+      <div class="objectives-title">学习目标</div>
+      <ul>
+        <li>能用自己的话解释 LLM 是什么，以及它为什么是「概率生成器」而不是「知识库」</li>
+        <li>能讲清 LLM 的完整链路：Token → Transformer/自注意力 → 预训练 → 指令微调 → RLHF 对齐</li>
+        <li>能识别 LLM 的能力边界（幻觉、上下文窗口、知识截止），并说明 Agent 类应用如何绕开这些边界</li>
+        <li>能结合 llm-wiki-agent 案例，说明「LLM + 流程 + 工具」如何组成一个自动维护的知识库 Agent</li>
+      </ul>
+    </div>
+    <div class="core-questions">
+      <div class="core-question">LLM 的「智能」到底来自哪里？它是在思考，还是在续写？</div>
+      <div class="core-question">它为什么会一本正经地答错？幻觉与上下文窗口分别限制了什么？</div>
+      <div class="core-question">从「聊天」到「干活」（例如 llm-wiki-agent 自动建 wiki），中间到底加了什么？</div>
+    </div>
+    <div class="section">
+      <div class="section-title">概念解释</div>
+      <div class="interpretation">我的理解：LLM 本质上是一个巨大的「下一词预测器」。它把人类积累的海量文本压缩进上千亿个参数里，学到的不是查字典，而是「接着最像的下文写」。它没有数据库、也不校验事实，但因为见过的模式足够多，涌现出了翻译、总结、推理甚至拆解任务的能力。所以正确的使用姿势是：把它当成一个极其博学、却会一本正经胡说的「实习生」——能力强，但需要给它资料、流程和检查，而这正是 Skill 与 Agent 要补上的部分。</div>
+      <div class="mechanism-list">
+        <div class="mechanism-item">
+          <div class="mechanism-title">Token 化：把文本切成模型认识的单位</div>
+          <div class="mechanism-desc">模型不读字母和单词，而是把文本切成 token（约等于词或词根，如 walking 可拆成 walk+ing）。模型对 token 做预测，因此上下文窗口也以 token 计量——中文约 1 个汉字 ≈ 1~2 个 token。</div>
+        </div>
+        <div class="mechanism-item">
+          <div class="mechanism-title">Transformer 与自注意力：看见整段话的关系</div>
+          <div class="mechanism-desc">2017 年《Attention Is All You Need》提出 Transformer。自注意力让每个 token 同时「观察」序列中所有其他 token，计算谁和谁相关，从而捕捉长距离依赖（例如把隔了很多句的「它」指回正确的名词）。它还能整段并行处理，让超大模型训练成为可能。</div>
+        </div>
+        <div class="mechanism-item">
+          <div class="mechanism-title">预训练：自己教自己的自监督学习</div>
+          <div class="mechanism-desc">把互联网级的语料（网页、书籍、代码）喂给模型，目标只有一个：预测下一个 token。猜错了就调整参数。由于语料本身就是答案，不需要人工标注；语料和参数越大，能力越强，这就是「规模定律」。</div>
+        </div>
+        <div class="mechanism-item">
+          <div class="mechanism-title">指令微调 + RLHF：从「会续写」到「会听话」</div>
+          <div class="mechanism-desc">预训练出的模型只会接着写。先用人工写的「问题-优质回答」对做监督微调（SFT），教它像助手一样回应；再用 RLHF（基于人类偏好的强化学习）让模型学会输出人类更喜欢、更安全的内容。ChatGPT/Claude 这类产品体验来自这一层。</div>
+        </div>
+        <div class="mechanism-item">
+          <div class="mechanism-title">推理时的上下文窗口与采样</div>
+          <div class="mechanism-desc">生成时模型一次只能「看到」上下文窗口内的内容（从早期 4K token 到如今的百万级），窗口之外一律不记得。每次输出一个 token 前按概率采样，temperature/top-p 控制随机性。知识截止、幻觉都与这层机制直接相关。</div>
+        </div>
+        <div class="mechanism-item">
+          <div class="mechanism-title">涌现能力：规模带来的意外之喜</div>
+          <div class="mechanism-desc">模型大到一定程度后，会出现少样本学习、思维链推理等未显式训练的能力。学界对「涌现」的界定仍有争议（部分取决于评测方式），但多步推理等能力确实更多出现在大模型上。</div>
+        </div>
+      </div>
+      <div class="features">
+        <span class="feature-tag">提示即接口：零样本/少样本适应多任务，无需为每个任务重新训练</span>
+        <span class="feature-tag">优化「像不像」，不校验「对不对」——幻觉的根源</span>
+        <span class="feature-tag">无内置记忆：只认当前上下文窗口内的信息</span>
+        <span class="feature-tag">能力随规模涌现：大数据 + 大参数 → 强泛化</span>
+        <span class="feature-tag">训练与推理算力门槛高，环境与资金代价大</span>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">应用场景</div>
+      <div class="scenario">
+        <div class="scenario-title">llm-wiki-agent：让 LLM 当你的知识库管理员</div>
+        <div class="scenario-context">llm-wiki-agent 是 SamurAIGPT 开源的项目，定位是「会自动构建并维护自己的个人知识库」。用法很简单：把 PDF、论文、网页或笔记丢进 raw/ 目录，对编码 Agent 说一句「ingest 某文件」，Agent 就会读取文档、抽取其中的实体与概念，自动生成带 [[wikilinks]] 互相引用的 wiki/ 目录（含 index.md 目录页、log.md 操作日志、overview.md 总览、sources/ 来源页、entities/ 实体页、concepts/ 概念页、syntheses/ 查询沉淀页），还能生成可视化关系图谱 graph.html，并在发现资料间矛盾时当场标记。</div>
+        <div class="scenario-analysis">把它拆开看，正好演示了 LLM 的三种能力如何组合成 Agent 工作流：1）阅读理解与信息抽取——把非结构化文档变成结构化的互链 wiki 页面；2）遵循 schema 执行流程——项目里的 CLAUDE.md/AGENTS.md 相当于「给 LLM 的岗位手册」，约束页面格式、命名与维护流程，这与本仓库 Skill 的思想一脉相承；3）把一次性问答沉淀为长期资产——query 的答案可以回存为 synthesis 页面，让每次投入都累积。项目还刻意区分于 RAG：RAG 每次查询现算现答，它则把知识「编译」成常驻 wiki、随每次 ingest 变厚。它的局限同样来自 LLM 本体——抽取可能出错，所以要有 lint 与人工抽查兜底，这恰好印证：LLM 需要「流程 + 检查」才能真正可靠。</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">概念辨析</div>
+      <div class="confusion-item">
+        <div class="confusion-q">LLM 是「会思考的电脑」还是「会查资料的搜索引擎」？</div>
+        <div class="confusion-a">都不是。搜索引擎返回真实存在的页面，LLM 是逐 token 生成「最可能的下一段文字」，没有真值校验。它看起来懂很多，是因为训练语料里的模式够多；「说得流畅」不等于「说得正确」——这正是幻觉产生的原因，也是所有 LLM 应用必须做事实核验的理由。</div>
+      </div>
+      <div class="confusion-item">
+        <div class="confusion-q">LLM 和「大模型的上下文」（本仓库 llm-context.html）是一回事吗？</div>
+        <div class="confusion-a">不是同一层的东西。LLM 是训练出来的模型本体（能力层）；上下文是推理时模型能看到的输入窗口（使用层），包括系统提示、对话历史、检索结果等。同一个模型，上下文里装什么、装多少，直接决定它答什么——LLM 决定「能答多好」，上下文决定「这次答什么」。</div>
+      </div>
+      <div class="confusion-item">
+        <div class="confusion-q">LLM Agent（如 llm-wiki-agent）和聊天机器人有什么区别？</div>
+        <div class="confusion-a">聊天机器人一问一答，输出完就结束。Agent = LLM + 目标拆解 + 工具调用 + 多轮反馈：它能自己规划步骤、调用搜索/文件工具、根据结果修正，并把产出固化下来（llm-wiki-agent 把成果写成 wiki 文件就是「从对话到资产」）。若再把固定流程沉淀成 Skill，Agent 就能稳定复用地干同一类活。</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">自测检验</div>
+      <div class="test-item">
+        <div class="test-q">用一句话分别说明 LLM 训练三阶段解决什么问题。</div>
+        <div class="test-a">预训练学语言模式（会续写），指令微调学「像助手一样回应」（会听话），RLHF 学人类偏好（更安全、更有用、少胡来）。</div>
+      </div>
+      <div class="test-item">
+        <div class="test-q">为什么把参考资料写进提示词能让 LLM 少幻觉？这利用了它的什么机制？</div>
+        <div class="test-a">利用了上下文窗口机制：放进窗口的信息成为模型「当下可见」的续写依据，它会优先顺着给定材料组织输出，而不是全靠训练记忆中的统计联想编造。RAG 和 llm-wiki-agent 的 ingest 本质上都是把「外部事实」搬进上下文可见的范围内。</div>
+      </div>
+      <div class="test-item">
+        <div class="test-q">相比「把 PDF 直接丢给 RAG 问答」，llm-wiki-agent 的价值差异在哪里？</div>
+        <div class="test-a">RAG 每次查询都临时检索拼接、答完即弃，不沉淀结构；llm-wiki-agent 把知识「编译」成常驻的互链 wiki，跨文档矛盾在 ingest 时就被标记，知识随每次投入持续累积，还能生成关系图谱。代价是它需要额外的流程约定（schema、lint）来保证质量。</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">参考来源</div>
+      <div class="source-item">
+        <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Vaswani et al., Attention Is All You Need (arXiv:1706.03762)</a>
+        <span class="source-note">- Transformer 与自注意力机制的原始论文，LLM 的架构起点</span>
+      </div>
+      <div class="source-item">
+        <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">Jay Alammar, The Illustrated Transformer</a>
+        <span class="source-note">- 自注意力与 Transformer 的图解入门，直观好懂</span>
+      </div>
+      <div class="source-item">
+        <a href="https://github.com/SamurAIGPT/llm-wiki-agent" target="_blank" rel="noopener">SamurAIGPT / llm-wiki-agent (GitHub)</a>
+        <span class="source-note">- 本次调研的案例项目：LLM 自动维护个人知识库的完整实现</span>
+      </div>
+      <div class="source-item">
+        <a href="https://www.databricks.com/blog/llm-pre-training-and-custom-llms" target="_blank" rel="noopener">Databricks, LLM Pre-Training and Custom LLMs</a>
+        <span class="source-note">- 预训练/指令微调/RLHF 三阶段的工程视角说明</span>
+      </div>
+    </div>
+    <div class="footer">概念学习资料 | 配色: 深海蓝</div>
+  </div>
+</body>
+</html>

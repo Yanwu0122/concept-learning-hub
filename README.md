@@ -6,8 +6,8 @@
 
 本仓库是课堂作业的成果，用于：
 - 保存一个封装了「概念调研 → 内容组织 → HTML 渲染」完整流程的项目级 Skill
-- 保存由该 Skill 生成的三个核心概念学习资料（Agent、大模型的上下文、Skill）
-- 说明三个概念之间的关系
+- 保存由该 Skill 生成的核心概念学习资料（Agent、大模型的上下文、Skill、LLM 等）
+- 说明概念之间的关系
 - 作为后续课程项目继续沉淀学习资料的个人工具基础
 
 ## 目录结构
@@ -23,11 +23,13 @@ concept-learning-hub/
 │           └── scripts/
 │               └── generate_learning_material.py  # HTML 渲染脚本
 ├── learning-materials/
-│   ├── agent.html                                 # Agent 概念学习资料
-│   ├── llm-context.html                           # 大模型的上下文
-│   ├── skill.html                                 # Skill 概念学习资料
-│   └── concept-relationship.html                  # 三者关系（网页版）
-├── concept-relationship.md                        # 三者关系说明（Markdown 版）
+│   ├── README.md                                # 学习笔记体系索引与新增规范
+│   ├── agent.html                               # Agent 概念学习资料
+│   ├── llm-context.html                         # 大模型的上下文
+│   ├── skill.html                               # Skill 概念学习资料
+│   ├── llm.html                                 # LLM（大语言模型）概念学习资料
+│   └── concept-relationship.html                # 三者关系（网页版）
+├── concept-relationship.md                      # 三者关系说明（Markdown 版）
 ├── README.md
 └── .gitignore
 ```
@@ -43,7 +45,11 @@ concept-learning-hub/
 3. 助手会识别到匹配场景，自动加载 `.workbuddy/skills/concept-learning-generator/` 下的 Skill，按既定流程生成结构化学习资料。
 4. 生成的成果是一份独立的 HTML 学习资料，包含学习目标、核心问题、概念解释、应用场景、概念辨析、自测检验与参考来源。
 
-Skill 是可复用的：给它任意一个新概念名，它都能按统一结构产出学习资料，不限于本仓库已有的三个概念。
+Skill 是可复用的：给它任意一个新概念名，它都能按统一结构产出学习资料，不限于本仓库已有的概念。
+
+## 学习笔记体系
+
+本仓库以 `learning-materials/` 作为概念学习笔记库，**笔记索引与新增规范见 [learning-materials/README.md](learning-materials/README.md)**。每份笔记对应一个概念，由同一个 Skill 按统一结构生成，便于横向对比与持续扩充。
 
 ## 已生成的学习资料
 
@@ -52,14 +58,16 @@ Skill 是可复用的：给它任意一个新概念名，它都能按统一结�
 | `agent.html` | Agent（智能代理） | 定义、感知-推理-行动机制、应用与边界 |
 | `llm-context.html` | 大模型的上下文 | 上下文窗口、Token、注意力机制与影响 |
 | `skill.html` | Skill（技能包） | 定义、组成结构、执行模式与复用价值 |
+| `llm.html` | LLM（大语言模型） | 训练三阶段、Transformer、能力边界与 llm-wiki-agent 案例 |
 | `concept-relationship.html` | 三者关系 | 上下文如何影响 Agent，Skill 如何沉淀知识 |
+| `README.md` | 笔记索引 | 体系说明：目录约定、文件清单、如何新增笔记 |
 
-三份资料均使用本仓库的 Skill 生成，并经过本人阅读、理解与核查，资料中的来源链接均真实可访问。
+资料均使用本仓库的 Skill 生成，并经过本人阅读、理解与核查，资料中的来源链接均真实可访问。
 
 ## 使用 AI 后的人工核查
 
 在使用 AI 协助组织本仓库过程中，我做了以下人工核查与修改：
-- 逐个阅读并核对了三份学习资料的核心表述，确保概念解释准确、无证据性错误。
+- 逐个阅读并核对了各份学习资料的核心表述，确保概念解释准确、无证据性错误。
 - 核查所有参考来源链接均可访问，并补充了官方与权威来源；移除了不可验证的占位链接。
 - 复核了 concept-relationship 中对「上下文—Agent—Skill」关系的描述，确保符合课程理解。
 - 检查了 Skill 的目录结构与 YAML 元数据符合规范。
