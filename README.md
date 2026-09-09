@@ -4,11 +4,12 @@
 
 ## 仓库用途
 
-本仓库是课堂作业的成果，用于：
-- 保存一个封装了「概念调研 → 内容组织 → HTML 渲染」完整流程的项目级 Skill
-- 保存由该 Skill 生成的核心概念学习资料（Agent、大模型的上下文、Skill、LLM 等）
+本仓库从课堂作业起步，定位是**可持续迭代的个人知识库**，用于：
+- 保存项目级 Skill：概念学习生成器 `concept-learning-generator`（调研 → 内容组织 → HTML 渲染）+ 知识库管家 `knowledge-organizer`（自动识别领域、分门别类、登记入库）
+- 保存由 Skill 生成并经本人核查的概念学习资料（Agent、大模型的上下文、Skill、LLM 等）
 - 说明概念之间的关系
-- 作为后续课程项目继续沉淀学习资料的个人工具基础
+- 提供分类登记（catalog.json）、搜索与复习门户（hub.html）和素材投递口（inbox/）
+- 作为后续课程项目继续沉淀学习资料的个人工具基础与作品集材料
 
 ## 目录结构
 
@@ -16,19 +17,27 @@
 concept-learning-hub/
 ├── .workbuddy/
 │   └── skills/
-│       └── concept-learning-generator/
+│       ├── concept-learning-generator/          # Skill 1：概念学习资料生成
+│       │   ├── SKILL.md                            # Skill 核心文件
+│       │   ├── references/
+│       │   │   └── color-schemes.md                # 配色方案参考
+│       │   └── scripts/
+│       │       └── generate_learning_material.py  # HTML 渲染脚本
+│       └── knowledge-organizer/                 # Skill 2：知识库管家（自动分类入库）
 │           ├── SKILL.md                            # Skill 核心文件
-│           ├── references/
-│           │   └── color-schemes.md                # 配色方案参考
 │           └── scripts/
-│               └── generate_learning_material.py  # HTML 渲染脚本
-├── learning-materials/
-│   ├── README.md                                # 学习笔记体系索引与新增规范
+│               └── rebuild_hub.py                 # 读 catalog.json 重建门户 hub.html
+├── learning-materials/                         # 知识库主体
+│   ├── README.md                                # 笔记体系索引、领域分类、入库规范
+│   ├── hub.html                                 # 🧭 知识库门户（搜索 + 领域分区 + 复习）
+│   ├── catalog.json                             # 登记册：每份笔记的领域/标签/摘要
 │   ├── agent.html                               # Agent 概念学习资料
 │   ├── llm-context.html                         # 大模型的上下文
 │   ├── skill.html                               # Skill 概念学习资料
 │   ├── llm.html                                 # LLM（大语言模型）概念学习资料
 │   └── concept-relationship.html                # 三者关系（网页版）
+├── inbox/                                       # 📥 素材投递口（放原始资料待归类）
+│   └── README.md
 ├── concept-relationship.md                      # 三者关系说明（Markdown 版）
 ├── README.md
 └── .gitignore
@@ -47,9 +56,15 @@ concept-learning-hub/
 
 Skill 是可复用的：给它任意一个新概念名，它都能按统一结构产出学习资料，不限于本仓库已有的概念。
 
-## 学习笔记体系
+**知识库管家（knowledge-organizer）**：对 AI 说「把 XX 收进知识库 / 整理 inbox / 学一个新概念并归档」，它会自动识别素材领域 → 分门别类（同主题并入已有笔记，新主题走生成器）→ 登记 catalog → 重建门户 → 推送。详细流程见其 `SKILL.md`。
 
-本仓库以 `learning-materials/` 作为概念学习笔记库，**笔记索引与新增规范见 [learning-materials/README.md](learning-materials/README.md)**。每份笔记对应一个概念，由同一个 Skill 按统一结构生成，便于横向对比与持续扩充。
+## 学习笔记体系（知识库）
+
+本仓库以 `learning-materials/` 作为知识库主体，**索引、领域分类与入库规范见 [learning-materials/README.md](learning-materials/README.md)**。
+
+- 🧭 **知识库门户**：打开 [learning-materials/hub.html](learning-materials/hub.html)（本地双击即可）——按领域分区浏览全部笔记，支持关键词实时搜索与「随机复习」。
+- 🗂️ **自动分类登记**：每份笔记在 [catalog.json](learning-materials/catalog.json) 中登记领域与标签；`knowledge-organizer` Skill 会把新素材自动识别领域、分门别类地收进来。
+- 📥 **素材投递口**：把想学的网页/文章/课件丢进 [inbox/](inbox/)，对 AI 说「把 inbox 里的内容整理进知识库」即可。
 
 ## 已生成的学习资料
 

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库门户 · Concept Learning Hub</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1e2430; --sub:#5b6472;
+    --line:#e5e8f0; --brand:#4f46e5; --brand-soft:#eef2ff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6; padding:0 0 64px;
+  }
+  header.hero{
+    background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 55%,#db2777 100%);
+    color:#fff; padding:44px 20px 120px; text-align:center; position:relative;
+  }
+  header.hero h1{font-size:30px; font-weight:700; letter-spacing:.5px;}
+  header.hero p{opacity:.92; margin-top:8px; font-size:15px;}
+  .stats{display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap;}
+  .stat{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25);
+        border-radius:999px; padding:4px 16px; font-size:13px;}
+  .control{max-width:960px; margin:-70px auto 0; padding:0 20px; position:relative; z-index:2;}
+  .searchbar{
+    background:var(--card); border-radius:16px; box-shadow:0 8px 30px rgba(30,41,59,.10);
+    padding:14px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  }
+  .searchbar input{
+    flex:1; min-width:220px; border:none; outline:none; font-size:16px; background:transparent; color:var(--ink);
+  }
+  .searchbar input::placeholder{color:#98a0af;}
+  .btn{
+    border:none; cursor:pointer; font-size:14px; border-radius:10px; padding:8px 16px;
+    background:var(--brand); color:#fff; font-weight:600; transition:.15s;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:var(--brand-soft); color:var(--brand);}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .chip{
+    border:1px solid var(--line); background:var(--card); color:var(--sub);
+    border-radius:999px; padding:5px 14px; font-size:13px; cursor:pointer; transition:.15s;
+  }
+  .chip:hover{border-color:var(--brand); color:var(--brand);}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600;}
+  .count{max-width:960px; margin:18px auto 0; padding:0 20px; color:var(--sub); font-size:13px;}
+  .grid{max-width:960px; margin:14px auto 0; padding:0 20px; display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px;}
+  .card{
+    background:var(--card); border-radius:14px; overflow:hidden; cursor:pointer;
+    border:1px solid var(--line); box-shadow:0 2px 10px rgba(30,41,59,.05);
+    display:flex; flex-direction:column; transition:.15s; text-decoration:none; color:inherit;
+  }
+  .card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(30,41,59,.12); border-color:#c7cbe0;}
+  .bar{height:6px; flex:none;}
+  .card-body{padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .card h3{font-size:17px;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{font-size:11px; color:var(--sub); background:#f0f2f8; border-radius:6px; padding:2px 8px;}
+  .card p{font-size:13px; color:var(--sub); flex:1;}
+  .card .go{font-size:13px; font-weight:600; color:var(--brand); margin-top:6px;}
+  .card.overview{grid-column:1/-1; flex-direction:row; align-items:center; gap:14px;}
+  .card.overview .card-body{padding:18px 22px;}
+  .card.overview h3{font-size:19px;}
+  .empty{grid-column:1/-1; text-align:center; color:var(--sub); padding:40px 0; font-size:15px;}
+  footer{max-width:960px; margin:40px auto 0; padding:0 20px; color:#98a0af; font-size:12px; text-align:center;}
+  .badge{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
+         border-radius:999px; padding:3px 10px; color:#fff;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>🧭 知识库门户</h1>
+  <p>Concept Learning Hub · 一个概念一份笔记 · 自动分类 / 一键检索 / 随机复习</p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="control">
+  <div class="searchbar">
+    <input id="q" type="search" placeholder="🔍 搜索概念、标签或关键词…（如：Token / Agent / RLHF）" autocomplete="off">
+    <button class="btn ghost" id="randBtn" title="随机打开一份笔记用于复习">🎲 随机复习</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+
+<div class="count" id="count"></div>
+<div class="grid" id="grid"></div>
+
+<footer>
+  数据由 <code>learning-materials/catalog.json</code> 驱动，页面由 knowledge-organizer Skill 自动重建 · 最后更新：2026-09-09
+</footer>
+
+<script type="application/json" id="catalog-data">
+{
+  "schema": "concept-learning-hub catalog v1",
+  "updated": "2026-09-09",
+  "note": "本文件是知识库的机器可读登记册（数据真源）。新增/修改笔记时必须同步更新 entries；新增领域时先在 domains 注册。hub.html 由 knowledge-organizer 的 rebuild_hub.py 依据本文件自动生成，请勿手工改 hub.html 的数据部分。",
+  "domains": [
+    {
+      "id": "overview",
+      "name": "知识地图",
+      "emoji": "🗺️",
+      "color": "#6366f1",
+      "desc": "总览与关系说明，串起整个知识库的骨架"
+    },
+    {
+      "id": "llm",
+      "name": "大模型与生成式 AI",
+      "emoji": "🧠",
+      "color": "#7c3aed",
+      "desc": "大语言模型本体：架构、训练、上下文、提示词、能力与边界"
+    },
+    {
+      "id": "agent",
+      "name": "智能体与自动化",
+      "emoji": "🤖",
+      "color": "#db2777",
+      "desc": "Agent、工具调用、Skill、工作流：让模型动起来完成任务"
+    },
+    {
+      "id": "ml-basics",
+      "name": "机器学习基础",
+      "emoji": "🧬",
+      "color": "#0d9488",
+      "desc": "机器学习与深度学习的基础概念（可扩展领域）"
+    },
+    {
+      "id": "engineering",
+      "name": "AI 工程与工具",
+      "emoji": "🛠️",
+      "color": "#ea580c",
+      "desc": "Git、检索、评测、部署等工程实践（可扩展领域）"
+    },
+    {
+      "id": "general",
+      "name": "通用与未分类",
+      "emoji": "📚",
+      "color": "#64748b",
+      "desc": "暂未归入上述领域的知识，等待后续细化"
+    }
+  ],
+  "entries": [
+    {
+      "id": "concept-relationship",
+      "title": "概念关系总览：上下文 × Agent × Skill",
+      "type": "overview",
+      "file": "learning-materials/concept-relationship.html",
+      "domain": "overview",
+      "tags": [
+        "概念关系",
+        "Agent",
+        "上下文",
+        "Skill"
+      ],
+      "summary": "一张图讲清知识库骨架：上下文如何影响 Agent 的工作，Skill 如何沉淀可复用的任务知识。",
+      "added": "2026-09"
+    },
+    {
+      "id": "llm",
+      "title": "大语言模型（LLM）",
+      "type": "concept",
+      "file": "learning-materials/llm.html",
+      "domain": "llm",
+      "tags": [
+        "LLM",
+        "Transformer",
+        "预训练",
+        "RLHF",
+        "上下文学习",
+        "幻觉",
+        "llm-wiki-agent"
+      ],
+      "summary": "把 LLM 理解为“巨大的下一词预测器”：Token 化 → 注意力 → 预训练 → 对齐 → 涌现；案例拆解 llm-wiki-agent 如何用 LLM 自动维护知识库。",
+      "added": "2026-09"
+    },
+    {
+      "id": "llm-context",
+      "title": "大模型的上下文（Context）",
+      "type": "concept",
+      "file": "learning-materials/llm-context.html",
+      "domain": "llm",
+      "tags": [
+        "上下文窗口",
+        "Token",
+        "注意力机制",
+        "长文本",
+        "提示词"
+      ],
+      "summary": "上下文是模型工作台的边界：Token 如何计量、窗口满了怎么办、上下文质量如何决定输出好坏。",
+      "added": "2026-09"
+    },
+    {
+      "id": "agent",
+      "title": "Agent（智能代理）",
+      "type": "concept",
+      "file": "learning-materials/agent.html",
+      "domain": "agent",
+      "tags": [
+        "Agent",
+        "感知-推理-行动",
+        "工具调用",
+        "规划",
+        "LLM"
+      ],
+      "summary": "让模型“动起来”而不是“答一题”：感知 → 推理 → 规划 → 行动的工具调用闭环，以及它的适用边界。",
+      "added": "2026-09"
+    },
+    {
+      "id": "skill",
+      "title": "Skill（技能包）",
+      "type": "concept",
+      "file": "learning-materials/skill.html",
+      "domain": "agent",
+      "tags": [
+        "Skill",
+        "能力包",
+        "可复用",
+        "工作流",
+        "提示工程"
+      ],
+      "summary": "把一次性交代变成可复用资产：Skill 的组成结构、执行方式与沉淀价值——本仓库自身就是它最好的例子。",
+      "added": "2026-09"
+    }
+  ]
+}
+</script>
+
+<script>
+(function(){
+  var catalog = JSON.parse(document.getElementById('catalog-data').textContent);
+  var entries = catalog.entries, domains = catalog.domains;
+  var active = null, kw = '';
+  var domById = {}; domains.forEach(function(d){ domById[d.id] = d; });
+
+  // 统计
+  var statHtml = '<span class="stat">📄 笔记 ' + entries.length + ' 份</span>';
+  statHtml += '<span class="stat">🗂️ 领域 ' + domains.length + ' 类</span>';
+  statHtml += '<span class="stat">🏷️ 标签 ' + countTags() + ' 个</span>';
+  document.getElementById('stats').innerHTML = statHtml;
+  function countTags(){ var s = {}; entries.forEach(function(e){ e.tags.forEach(function(t){ s[t]=1; }); }); return Object.keys(s).length; }
+
+  // 领域 chips（含"全部"）
+  var chipsEl = document.getElementById('chips');
+  var chipAll = document.createElement('button');
+  chipAll.className = 'chip on'; chipAll.textContent = '📂 全部领域';
+  chipAll.onclick = function(){ active = null; refresh(); };
+  chipsEl.appendChild(chipAll);
+  domains.forEach(function(d){
+    var n = entries.filter(function(e){ return e.domain === d.id; }).length;
+    if (n === 0) return;
+    var b = document.createElement('button');
+    b.className = 'chip'; b.textContent = d.emoji + ' ' + d.name + ' (' + n + ')';
+    b.onclick = function(){ active = d.id; refresh(); };
+    chipsEl.appendChild(b);
+  });
+
+  var qEl = document.getElementById('q');
+  qEl.addEventListener('input', function(){ kw = qEl.value.trim().toLowerCase(); refresh(); });
+
+  document.getElementById('randBtn').onclick = function(){
+    var pool = entries;
+    if (pool.length === 0) return;
+    var e = pool[Math.floor(Math.random() * pool.length)];
+    window.open(e.file.split('/').pop(), '_blank');
+  };
+
+  function matches(e){
+    if (active && e.domain !== active) return false;
+    if (!kw) return true;
+    var dom = domById[e.domain];
+    var hay = (e.title + ' ' + e.summary + ' ' + e.tags.join(' ') + ' ' + dom.name + ' ' + dom.desc).toLowerCase();
+    return hay.indexOf(kw) >= 0;
+  }
+
+  function refresh(){
+    var list = entries.filter(matches);
+    // overview 类型的总览卡片永远排最前
+    list.sort(function(a,b){ return (a.type==='overview'?0:1) - (b.type==='overview'?0:1); });
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    document.getElementById('count').textContent = '共 ' + list.length + ' 份' + (active ? '（领域：' + domById[active].name + '）' : '') + (kw ? '，匹配关键词「' + qEl.value.trim() + '」' : '');
+    if (list.length === 0){
+      var e = document.createElement('div'); e.className='empty'; e.textContent='没有匹配的笔记，换个关键词试试？';
+      grid.appendChild(e); return;
+    }
+    list.forEach(function(en){
+      var dom = domById[en.domain];
+      var a = document.createElement('a');
+      a.className = 'card' + (en.type === 'overview' ? ' overview' : '');
+      a.href = en.file.split('/').pop();
+      a.target = '_blank';
+      var tags = en.tags.map(function(t){ return '<span class="tag">#' + t + '</span>'; }).join('');
+      a.innerHTML =
+        '<div class="bar" style="background:' + dom.color + '"></div>' +
+        '<div class="card-body">' +
+          '<div><span class="badge" style="background:' + dom.color + '">' + dom.emoji + ' ' + dom.name + '</span></div>' +
+          '<h3>' + en.title + '</h3>' +
+          '<p>' + en.summary + '</p>' +
+          '<div class="tags">' + tags + '</div>' +
+          '<div class="go">打开笔记 →</div>' +
+        '</div>';
+      grid.appendChild(a);
+    });
+    // 更新 chips 高亮
+    var allChips = chipsEl.querySelectorAll('.chip');
+    allChips.forEach(function(c){
+      c.classList.remove('on');
+      if (!active && c.textContent.indexOf('全部') === 0) c.classList.add('on');
+    });
+  }
+
+  refresh();
+})();
+</script>
+</body>
+</html>

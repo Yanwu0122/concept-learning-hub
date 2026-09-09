@@ -1,0 +1,101 @@
+{
+  "schema": "concept-learning-hub catalog v1",
+  "updated": "2026-09-09",
+  "note": "本文件是知识库的机器可读登记册（数据真源）。新增/修改笔记时必须同步更新 entries；新增领域时先在 domains 注册。hub.html 由 knowledge-organizer 的 rebuild_hub.py 依据本文件自动生成，请勿手工改 hub.html 的数据部分。",
+  "domains": [
+    {
+      "id": "overview",
+      "name": "知识地图",
+      "emoji": "🗺️",
+      "color": "#6366f1",
+      "desc": "总览与关系说明，串起整个知识库的骨架"
+    },
+    {
+      "id": "llm",
+      "name": "大模型与生成式 AI",
+      "emoji": "🧠",
+      "color": "#7c3aed",
+      "desc": "大语言模型本体：架构、训练、上下文、提示词、能力与边界"
+    },
+    {
+      "id": "agent",
+      "name": "智能体与自动化",
+      "emoji": "🤖",
+      "color": "#db2777",
+      "desc": "Agent、工具调用、Skill、工作流：让模型动起来完成任务"
+    },
+    {
+      "id": "ml-basics",
+      "name": "机器学习基础",
+      "emoji": "🧬",
+      "color": "#0d9488",
+      "desc": "机器学习与深度学习的基础概念（可扩展领域）"
+    },
+    {
+      "id": "engineering",
+      "name": "AI 工程与工具",
+      "emoji": "🛠️",
+      "color": "#ea580c",
+      "desc": "Git、检索、评测、部署等工程实践（可扩展领域）"
+    },
+    {
+      "id": "general",
+      "name": "通用与未分类",
+      "emoji": "📚",
+      "color": "#64748b",
+      "desc": "暂未归入上述领域的知识，等待后续细化"
+    }
+  ],
+  "entries": [
+    {
+      "id": "concept-relationship",
+      "title": "概念关系总览：上下文 × Agent × Skill",
+      "type": "overview",
+      "file": "learning-materials/concept-relationship.html",
+      "domain": "overview",
+      "tags": ["概念关系", "Agent", "上下文", "Skill"],
+      "summary": "一张图讲清知识库骨架：上下文如何影响 Agent 的工作，Skill 如何沉淀可复用的任务知识。",
+      "added": "2026-09"
+    },
+    {
+      "id": "llm",
+      "title": "大语言模型（LLM）",
+      "type": "concept",
+      "file": "learning-materials/llm.html",
+      "domain": "llm",
+      "tags": ["LLM", "Transformer", "预训练", "RLHF", "上下文学习", "幻觉", "llm-wiki-agent"],
+      "summary": "把 LLM 理解为“巨大的下一词预测器”：Token 化 → 注意力 → 预训练 → 对齐 → 涌现；案例拆解 llm-wiki-agent 如何用 LLM 自动维护知识库。",
+      "added": "2026-09"
+    },
+    {
+      "id": "llm-context",
+      "title": "大模型的上下文（Context）",
+      "type": "concept",
+      "file": "learning-materials/llm-context.html",
+      "domain": "llm",
+      "tags": ["上下文窗口", "Token", "注意力机制", "长文本", "提示词"],
+      "summary": "上下文是模型工作台的边界：Token 如何计量、窗口满了怎么办、上下文质量如何决定输出好坏。",
+      "added": "2026-09"
+    },
+    {
+      "id": "agent",
+      "title": "Agent（智能代理）",
+      "type": "concept",
+      "file": "learning-materials/agent.html",
+      "domain": "agent",
+      "tags": ["Agent", "感知-推理-行动", "工具调用", "规划", "LLM"],
+      "summary": "让模型“动起来”而不是“答一题”：感知 → 推理 → 规划 → 行动的工具调用闭环，以及它的适用边界。",
+      "added": "2026-09"
+    },
+    {
+      "id": "skill",
+      "title": "Skill（技能包）",
+      "type": "concept",
+      "file": "learning-materials/skill.html",
+      "domain": "agent",
+      "tags": ["Skill", "能力包", "可复用", "工作流", "提示工程"],
+      "summary": "把一次性交代变成可复用资产：Skill 的组成结构、执行方式与沉淀价值——本仓库自身就是它最好的例子。",
+      "added": "2026-09"
+    }
+  ]
+}
